@@ -36,7 +36,7 @@ app.use(cors({ origin: true }));
 
 // register new fact checker user
 app.post('/register', async (req, res) => {
-  const snapshot = await admin.firestore().collection('factCheckers').where("name","==","rrrr").get()
+  const snapshot = await admin.firestore().collection('factCheckers').where("name","==","p").get()
   const hasPrevChecker = snapshot.docs.length 
   if (hasPrevChecker != 0) {
     res.json({ result: `Fact Checker User already exists` });

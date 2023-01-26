@@ -21,18 +21,27 @@ exports.launchVote = functions.firestore.document('/messages/{documentId}')
     const snapshot = await admin
       .firestore()
       .collection('systemParameters')
-      .doc('44OJTbNhFLOHUOFyw9Cg')
+      .doc('AuqutCm6KcMTJf5VjT9m')
       .get()
 
-    var startThreshold = snapshot.doc == undefined ? -1 :snapshot.data().thresholdToStartVote
-    var endThreshold = snapshot.doc == undefined ? -1 : snapshot.data().thresholdToEndVote
+    var startThreshold = snapshot.data().thresholdToStartVote
+    var endThreshold =  snapshot.data().thresholdToEndVote
 
     if (startThreshold || endThreshold == -1) {
       functions.logger.log('No start and end threshold set')
     }
 
     const original = snap.after.data()
-    console.log(original)
+
+    var activeCheckers = []
+    if (original.instance_count >= startThreshold & original.instance_count < endThreshold) {
+       const factCheckers = await admin.firestore().collection('factCheckers').get();
+       factCheckers.forEach((doc) => {
+        if (doc.data().isActive==true) {
+          activeCheckers.push(doc.data().name)
+        }})
+       console.log(activeCheckers)
+    }
 
 });
 
