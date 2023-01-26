@@ -23,7 +23,40 @@ RESOURCES:
 combine express with functions - https://firebase.google.com/docs/functions/http-events#using_existing_express_apps
 
 */
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 
-// exports.webhookHandlerFactChecker = functions.https.onRequest(async (req, res) => {
-//   //to be done
-// });
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+
+// Automatically allow cross-origin requests
+app.use(cors({ origin: true }));
+
+// register new fact checker user
+app.post('/register', async (req, res) => {
+  const snapshot = await admin.firestore().collection('factCheckers').where("name","==","rrrr").get()
+  const hasPrevChecker = snapshot.docs.length 
+  if (hasPrevChecker != 0) {
+    res.json({ result: `Fact Checker User already exists` });
+  } else {
+    const newCheckerData = {
+      "name": req.body.name,
+      "isActive": true,
+      "telegramId": 100,
+      "level": 0,
+      "experience": 0,
+      "numVoted":0,
+      "numCorrectVotes":0,
+      "numVerifiedLinks":0
+    }
+    const newChecker = await admin.firestore().collection('factCheckers').add(newCheckerData);
+  
+    res.json({ result: `Fact Checker User with ID: ${newChecker.id} is created.` });
+  }
+
+  })
+
+// Expose Express API as a single Cloud Function:
+exports.webhookHandlerFactChecker = functions.region('asia-southeast1').https.onRequest(app);

@@ -9,8 +9,8 @@ const webhookHandlerUser = require('./definitions/webhookHandlerUser');
 exports.addMessage = demoAddMessage.addMessage;
 exports.makeUppercase = demoMakeUppercase.makeUppercase;
 
-//our stuff, uncomment when ready!
-//exports.launchVote = dbUpdateHanderInstanceCount.launchVote;
-//exports.sendResponse = dbUpdateHanderVoteCount.sendResponse;
-//exports.webhookHandlerFactChecker = webhookHandlerFactChecker.webhookHandlerFactChecker;
-//exports.webhookHandlerUser = webhookHandlerUser.webhookHandlerUser;
+// //our stuff, uncomment when ready!
+exports.launchVote = dbUpdateHanderInstanceCount.launchVote;
+// //exports.sendResponse = dbUpdateHanderVoteCount.sendResponse;
+exports.webhookHandlerFactChecker = webhookHandlerFactChecker.webhookHandlerFactChecker;
+// //exports.webhookHandlerUser = webhookHandlerUser.webhookHandlerUser;

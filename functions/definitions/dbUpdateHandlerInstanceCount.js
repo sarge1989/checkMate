@@ -12,7 +12,27 @@ On update to any messages instance count:
 
 */
 
-// exports.launchVote = functions.firestore.document('/messages/{messageId}')
-//   .onWrite((snap, context) => {
-//     // change this
-//   });
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+
+exports.launchVote = functions.firestore.document('/messages/{documentId}')
+  .onWrite(async (snap, context) => {
+
+    const snapshot = await admin
+      .firestore()
+      .collection('systemParameters')
+      .doc('44OJTbNhFLOHUOFyw9Cg')
+      .get()
+
+    var startThreshold = snapshot.doc == undefined ? -1 :snapshot.data().thresholdToStartVote
+    var endThreshold = snapshot.doc == undefined ? -1 : snapshot.data().thresholdToEndVote
+
+    if (startThreshold || endThreshold == -1) {
+      functions.logger.log('No start and end threshold set')
+    }
+
+    const original = snap.after.data()
+    console.log(original)
+
+});
+
